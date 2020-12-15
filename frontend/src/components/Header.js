@@ -8,31 +8,23 @@ class Header extends Component {
         const authToken = localStorage.getItem(AUTH_TOKEN)
         return (
           <div className="d-flex flex-row header">
-          {authToken && 
-            (<Link to="/home" className="p-2 header-title no-underline black">
+          {/* allow user to navigate to view home page even if not logged in */}
+            <Link to="/home" className="p-2 header-title no-underline black">
                 Howie's Music WebApp
-            </Link>)
-          }
-          {!authToken && 
-            (
-              <div className="p-2 header-title no-underline black">
-                Howie's Music WebApp
-              </div>
-            )
-          }
-            {authToken && 
-            (<div className="p-2">
-              <Link to="/home" className="p-2 ml1 no-underline black">
+            </Link>
+              {/* <Link to="/home" className="p-2 ml1 no-underline black">
                 home
               </Link>
+               */}
+               {/* but searching and posting are restricted to logged in users */}
+            {authToken && (<div className="p-2">
               <Link to="/search" className="p-2 ml1 no-underline black">
                 search
               </Link>
               <Link to="/create" className="p-2 ml1 no-underline black">
                 submit
               </Link>
-            </div>
-            )}
+            </div>)}
             <div className="p-2 ml-auto">
               {authToken ? (
                 <div

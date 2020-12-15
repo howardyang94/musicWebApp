@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Link from './Link'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
+import { AUTH_TOKEN } from '../constants'
+
 
 export const FEED_QUERY = gql `
 {
@@ -32,6 +34,7 @@ class LinkList extends Component {
         store.writeQuery({ query: FEED_QUERY, data })
     }
     render() {
+        // if(!localStorage.getItem(AUTH_TOKEN)) this.props.history.push('/')
         return (
             <Query query={FEED_QUERY}> 
                 {({ loading, error, data, subscribeToMore}) => {

@@ -8,6 +8,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
+import { AUTH_TOKEN } from '../constants'
 
 const POST_MUTATION = gql`
     mutation PostMutation($title: String!, $artist: String!, $tags: String, $description: String, $url: String) {

@@ -24,6 +24,7 @@ const LOGIN_MUTATION = gql`
 `
 
 class Login extends Component {
+
   state = {
     login: true, // switch between Login and SignUp
     email: '',
@@ -32,6 +33,9 @@ class Login extends Component {
   }
 
   render() {
+    // if user is still logged in redirect to home page
+    if(localStorage.getItem(AUTH_TOKEN)) this.props.history.push('/home')
+
     const { login, email, password, name } = this.state
     return (
         <Container>

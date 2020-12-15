@@ -10,7 +10,7 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import DropdownToggle from 'react-bootstrap/esm/DropdownToggle'
-// import { AUTH_TOKEN } from '../constants'
+import { AUTH_TOKEN } from '../constants'
 // import { timeDifferenceForDate } from '../utils'
 const DELETE_MUTATION = gql`
 mutation DeleteMutation($id: ID!) {
@@ -173,7 +173,7 @@ class Link extends Component {
                                 {postedBy}
                             </Col>
                             <Col xs sm ={{span: 'auto', order:'first'}} md lg xl={{span: 'auto', order:'last'}}>
-                                <Dropdown>
+                            {localStorage.getItem(AUTH_TOKEN) && (<Dropdown>
                                     <DropdownToggle  as={CustomToggle}/>
                                     <Dropdown.Menu className="dropdownMenu">
                                         <Dropdown.Item as="button" className="dropdownItem" onClick={() => this.setState({edit: !this.state.edit})}>
@@ -183,7 +183,7 @@ class Link extends Component {
                                             {this.deleteModal()}
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
-                                </Dropdown>
+                                </Dropdown>)}
                             </Col>
                         </Row>
                     
