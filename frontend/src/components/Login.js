@@ -24,27 +24,39 @@ const LOGIN_MUTATION = gql`
 `
 
 class Login extends Component {
-
   state = {
-    login: true, // switch between Login and SignUp
+    login: true, // true == Login and false == SignUp
     email: '',
     password: '',
     name: '',
+    loginValid: false,
+    signUpValid: false
   }
-
+  handleInput(e) {
+    const name = e.target.name
+    const value = e.target.value
+    this.setState({[name]: value}, this.validateLogin)
+  }
+  validateLogin() {
+    this.setState({ loginValid: this.state.password.length > 0 && this.state.email.length > 0 }, this.validateSignup)    
+  }
+  validateSignup() {
+    this.setState({ signUpValid: this.state.name.length > 0 && this.state.password.length > 0 && this.state.email.length > 0 })
+  }
   render() {
-    // if user is still logged in redirect to home page
+    // if user is already logged in redirect to home page
     if(localStorage.getItem(AUTH_TOKEN)) this.props.history.push('/home')
 
-    const { login, email, password, name } = this.state
+    const { login, email, password, name, loginValid, signUpValid} = this.state
     return (
         <Container>
         <h4 className="mv3">{login ? 'Login' : 'Sign Up'}</h4>
           {!login && (
             <Row>
               <input
+                name="name"
                 value={name}
-                onChange={e => this.setState({ name: e.target.value })}
+                onChange={e => this.handleInput(e)}
                 type="text"
                 placeholder="Your name"
               />
@@ -52,16 +64,18 @@ class Login extends Component {
           )}
           <Row className="search-fields">
           <input
+            name="email"
             value={email}
-            onChange={e => this.setState({ email: e.target.value })}
+            onChange={e => this.handleInput(e)}
             type="text"
             placeholder="Email Address"
           />
           </Row>
           <Row className="search-fields">
           <input
+            name="password"
             value={password}
-            onChange={e => this.setState({ password: e.target.value })}
+            onChange={e => this.handleInput(e)}
             type="password"
             placeholder="Password"
           />
@@ -74,7 +88,7 @@ class Login extends Component {
                 onCompleted={data => this._confirm(data)}
             >
                 {mutation => (
-                <Button className="search-button" onClick={mutation}>
+                <Button disabled={!loginValid && login || !signUpValid && !login} className="search-button" onClick={mutation}>
                     {login ? 'login' : 'create account'}
                 </Button>
                 )}
