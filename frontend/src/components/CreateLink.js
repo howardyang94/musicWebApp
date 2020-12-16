@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
-import FormErrors from './FormErrors'
 import { FEED_QUERY } from './LinkList'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -52,7 +51,7 @@ class CreateLink extends Component {
         edit: this.props.id ? true : false,
     }
     handleInput(e, req = false) {
-        const name = e.target.name
+        const name = e.target.id
         const value = e.target.value
         if(req) {
             this.setState({ [name]: value })
@@ -69,11 +68,11 @@ class CreateLink extends Component {
         switch(name) {
             case 'title':
                 titleValid = value === '' ? false : true
-                formErrors.title = titleValid ? '' : 'Please enter a Title'
+                formErrors.title = titleValid ? '' : 'Your post must contain a Title'
                 break;
             case 'artist':
                 artistValid = value === '' ? false : true
-                formErrors.artist = artistValid ? '' : 'Please enter an Artist'
+                formErrors.artist = artistValid ? '' : 'Your post must contain an Artist'
                 break;
             default: 
             //     console.warn('need to create validation case for ', name)
@@ -81,7 +80,7 @@ class CreateLink extends Component {
         this.setState({
             titleValid: titleValid,
             artistValid: artistValid,
-            formErrors: formErrors,
+            formErrors,
             formValid: titleValid && artistValid,
         })
     }
@@ -110,11 +109,11 @@ class CreateLink extends Component {
 
     render () {
         const { id, title, artist, tags, description, url } = this.state
+        // prevents access to home page unless logged in
+        if(!localStorage.getItem(AUTH_TOKEN)) this.props.history.push('/')
         return(
             <Container className="createLink">
-                <div>
-                    <FormErrors formErrors={this.state.formErrors} />
-                </div>
+            <h3>Create New Post</h3>
                     <Row>
                         <Col className="edit-link-fieldname" xs sm = "12" md lg = "2" xl = "1">
                             Title
@@ -122,7 +121,7 @@ class CreateLink extends Component {
                         <Col>
                             <input
                                 className="item"
-                                name="title"
+                                id="title"
                                 value={title}
                                 onChange={e => this.handleInput(e, true)}
                                 type="text"
@@ -137,7 +136,7 @@ class CreateLink extends Component {
                         <Col>
                             <input
                                 className="item"
-                                name="artist"
+                                id="artist"
                                 value={artist}
                                 onChange={e => this.handleInput(e, true)}
                                 type="text"
@@ -150,9 +149,9 @@ class CreateLink extends Component {
                             Tags
                         </Col>
                         <Col>
-                            <input id="tags"
+                            <input 
                                 className="item"
-                                name="tags"
+                                id="tags"
                                 value={tags}
                                 onChange={e => this.handleInput(e)}
                                 // onBlur={this.trimTag}
@@ -167,7 +166,7 @@ class CreateLink extends Component {
                         <Col>
                             <input
                                 className="item"
-                                name="url"
+                                id="url"
                                 value={url}
                                 onChange={e => this.handleInput(e)}
                                 type="text"
@@ -182,13 +181,21 @@ class CreateLink extends Component {
                         <textarea
                             // onInput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
                             className="item"
-                            name="description"
+                            id="description"
                             value={description}
                             onChange={e => this.handleInput(e)}
                             type="text"
                         />
                         </Col>
                     </Row>
+                    <div className="error">
+                        <div>
+                            {this.state.formErrors.title}
+                        </div>
+                        <div>
+                            {this.state.formErrors.artist}
+                        </div>
+                    </div>
                 {!this.state.edit && (
                     <Mutation
                         mutation={POST_MUTATION}

@@ -7,7 +7,7 @@ class FormErrors extends Component {
                 {Object.keys(this.props.formErrors).map((fieldName, i) => {
                 if(this.props.formErrors[fieldName].length > 0){
                     return (
-                    <p class='alert' key={i}>{this.props.formErrors[fieldName]}</p>
+                    <p className='alert' key={i}>{this.props.formErrors[fieldName]}</p>
                     )        
                 } else {
                     return '';

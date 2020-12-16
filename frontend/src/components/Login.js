@@ -4,7 +4,6 @@ import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
-// import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 
 const SIGNUP_MUTATION = gql`
@@ -30,10 +29,11 @@ class Login extends Component {
     password: '',
     name: '',
     loginValid: false,
-    signUpValid: false
+    signUpValid: false,
+    formErrors: ''
   }
   handleInput(e) {
-    const name = e.target.name
+    const name = e.target.id
     const value = e.target.value
     this.setState({[name]: value}, this.validateLogin)
   }
@@ -41,7 +41,14 @@ class Login extends Component {
     this.setState({ loginValid: this.state.password.length > 0 && this.state.email.length > 0 }, this.validateSignup)    
   }
   validateSignup() {
-    this.setState({ signUpValid: this.state.name.length > 0 && this.state.password.length > 0 && this.state.email.length > 0 })
+    this.setState({ signUpValid: this.state.loginValid && this.state.name.length > 0 })
+  }
+  handleError(error) {
+    // change error message provided to remove unneccessary text?
+    const errorMessage = error.message.substring(error.message.indexOf(':')+1)
+    this.setState({formErrors: errorMessage})
+    document.getElementById('email').value = ''
+    document.getElementById('password').value = ''
   }
   render() {
     // if user is already logged in redirect to home page
@@ -49,12 +56,20 @@ class Login extends Component {
 
     const { login, email, password, name, loginValid, signUpValid} = this.state
     return (
-        <Container>
-        <h4 className="mv3">{login ? 'Login' : 'Sign Up'}</h4>
+        <Container>       
+       
+        <Row>
+        <h3 className="mv3">{login ? 'Login' : 'Sign Up'}</h3>
+        </Row>
+        <Row>
+          <div className="error">
+            {this.state.formErrors}
+          </div>
+          </Row>   
           {!login && (
             <Row>
               <input
-                name="name"
+                id="name"
                 value={name}
                 onChange={e => this.handleInput(e)}
                 type="text"
@@ -64,7 +79,7 @@ class Login extends Component {
           )}
           <Row className="search-fields">
           <input
-            name="email"
+            id="email"
             value={email}
             onChange={e => this.handleInput(e)}
             type="text"
@@ -73,7 +88,7 @@ class Login extends Component {
           </Row>
           <Row className="search-fields">
           <input
-            name="password"
+            id="password"
             value={password}
             onChange={e => this.handleInput(e)}
             type="password"
@@ -86,21 +101,22 @@ class Login extends Component {
                 mutation={login ? LOGIN_MUTATION : SIGNUP_MUTATION}
                 variables={{ email, password, name }}
                 onCompleted={data => this._confirm(data)}
+                onError={error => this.handleError(error)}
             >
                 {mutation => (
-                <Button disabled={!loginValid && login || !signUpValid && !login} className="search-button" onClick={mutation}>
+                <Button disabled={(!loginValid && login) || (!signUpValid && !login)} className="search-button" onClick={mutation}>
                     {login ? 'login' : 'create account'}
                 </Button>
                 )}
             </Mutation>
-          <Button variant="secondary"
-            className="pointer button"
+            <span
+            className="no-underline blue pointer ml12 mt10"
             onClick={() => this.setState({ login: !login })}
-          >
-              {login
-                ? 'Need to create an account?'
-                : 'Already have an account?'}
-          </Button>
+            >
+                {login
+                  ? 'Create account'
+                  : 'Login to existing account'}
+            </span>
         </Row>
         </Container>
     )

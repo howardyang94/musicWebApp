@@ -29,6 +29,18 @@ input {
 .black {
   color: black;
 }
+.blue{
+  color:blue
+}
+.error {
+  color: red
+}
+.ml12{
+  margin-left: 12px;
+}
+.mt10{
+  margin-top: 10px;
+}
 .w95 {
   width: 95%;
   margin:auto;

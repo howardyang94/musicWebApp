@@ -45,7 +45,10 @@ class Search extends Component {
     return (
       <Container>
         <Row className="search-title">
-            Search In All Fields
+          <h3>Search</h3>
+        </Row>
+        <Row className="search-title">
+            All Fields
         </Row>
         <Row>
           <Col xs sm md lg xl ="auto">

@@ -4,7 +4,6 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import { AUTH_TOKEN } from '../constants'
 
-
 export const FEED_QUERY = gql `
 {
   feed (orderBy: {createdAt: desc}){
@@ -34,6 +33,7 @@ class LinkList extends Component {
         store.writeQuery({ query: FEED_QUERY, data })
     }
     render() {
+        // prevents access to home page unless logged in
         // if(!localStorage.getItem(AUTH_TOKEN)) this.props.history.push('/')
         return (
             <Query query={FEED_QUERY}> 

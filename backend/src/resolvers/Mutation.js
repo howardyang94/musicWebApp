@@ -18,7 +18,7 @@ async function signup(parent, args, context, info) {
 async function login(parent, args, context, info) {
     const user = await context.prisma.user.findOne({ where: { email: args.email } })
     if (!user) {
-        throw new Error('No such user found')
+        throw new Error('User not found')
     }
 
     const valid = await bcrypt.compare(args.password, user.password)
