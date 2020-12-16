@@ -156,8 +156,8 @@ class Link extends Component {
     }
     handleError(error) {
         // change error message provided to remove unneccessary text?
-        // const errorMessage = error.message.substring(error.message.indexOf(':')+1)
-        this.setState({formErrors: error.message, showDeleteModal: false})
+        const errorMessage = error.message.substring(error.message.indexOf(':')+1)
+        this.setState({formErrors: errorMessage, showDeleteModal: false})
     }
     render() {
         const { id, title, artist, tags, description, url } = this.props.link
