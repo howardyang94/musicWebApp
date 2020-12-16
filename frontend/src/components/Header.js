@@ -16,7 +16,7 @@ class Header extends Component {
                 home
               </Link>
                */}
-               {/* but searching and posting are restricted to logged in users */}
+            {/* but searching and posting are restricted to logged in users */}
             {authToken && (<div className="p-2">
               <Link to="/search" className="p-2 ml1 no-underline black">
                 search
@@ -31,7 +31,7 @@ class Header extends Component {
                   className="ml1 pointer black"
                   onClick={() => {
                     localStorage.removeItem(AUTH_TOKEN)
-                    this.props.history.push(`/`)
+                    this.props.history.push('/home')
                   }}
                 >
                   logout

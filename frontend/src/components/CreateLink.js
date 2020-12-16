@@ -47,7 +47,7 @@ class CreateLink extends Component {
         titleValid: this.props.id ? true : false,
         artistValid: this.props.id ? true : false,
         formValid: this.props.id ? true : false,
-        formErrors: {title:'', artist:''},
+        formErrors: {title:'', artist:'', error:''},
         edit: this.props.id ? true : false,
     }
     handleInput(e, req = false) {
@@ -61,6 +61,7 @@ class CreateLink extends Component {
 
         }
     }
+
     validateField(name, value) {
         let titleValid = this.state.titleValid
         let artistValid = this.state.artistValid
@@ -75,13 +76,13 @@ class CreateLink extends Component {
                 formErrors.artist = artistValid ? '' : 'Your post must contain an Artist'
                 break;
             default: 
-            //     console.warn('need to create validation case for ', name)
+                formErrors.error = value
         }
         this.setState({
             titleValid: titleValid,
             artistValid: artistValid,
             formErrors,
-            formValid: titleValid && artistValid,
+            formValid: titleValid && artistValid && formErrors.error.length === 0,
         })
     }
     trimTag() {
@@ -189,18 +190,18 @@ class CreateLink extends Component {
                         </Col>
                     </Row>
                     <div className="error">
-                        <div>
-                            {this.state.formErrors.title}
-                        </div>
-                        <div>
-                            {this.state.formErrors.artist}
-                        </div>
+                        {Object.keys(this.state.formErrors).map((message, i) => 
+                            <div key={'error'+i}>
+                                {this.state.formErrors[message]}
+                            </div>
+                        )}
                     </div>
                 {!this.state.edit && (
                     <Mutation
                         mutation={POST_MUTATION}
                         variables={{title,artist,tags,description,url}}
                         onCompleted={() => this.props.history.push('/home')}
+                        onError={error => this.validateField('error', error.message)}
                         update={(store, { data: { post } }) => {
                             post.tags = post.tags.trim()
                             const data = store.readQuery({ query: FEED_QUERY })
@@ -222,6 +223,7 @@ class CreateLink extends Component {
                             mutation={EDIT_MUTATION}
                             variables={{id,title,artist,tags,description,url}}
                             onCompleted={() => this.complete('save')}
+                            onError={error => this.validateField('error', error.message)}
                         >
                             {editMutation => (
                                 <Button variant="primary" 
