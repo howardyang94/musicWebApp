@@ -68,6 +68,9 @@ function edit(parent, args, context, info) {
 }
 
 function remove (parent, args, context, info) {
+    const userId = getUserId(context)
+    console.log(userId)
+    // todo: add verification that deleting user is the same as the posting user
     const link = context.prisma.link.delete({ where: {id: Number(args.id)} })
     return link
 }

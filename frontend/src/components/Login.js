@@ -56,16 +56,15 @@ class Login extends Component {
 
     const { login, email, password, name, loginValid, signUpValid} = this.state
     return (
-        <Container>       
-       
+      <Container>       
         <Row>
-        <h3 className="mv3">{login ? 'Login' : 'Sign Up'}</h3>
+          <h3 className="mv3">{login ? 'Login' : 'Sign Up'}</h3>
         </Row>
         <Row>
           <div className="error">
             {this.state.formErrors}
           </div>
-          </Row>   
+        </Row>   
           {!login && (
             <Row>
               <input
@@ -75,9 +74,9 @@ class Login extends Component {
                 type="text"
                 placeholder="Your name"
               />
-            </Row>
-          )}
-          <Row className="search-fields">
+          </Row>
+        )}
+        <Row className="search-fields">
           <input
             id="email"
             value={email}
@@ -85,8 +84,8 @@ class Login extends Component {
             type="text"
             placeholder="Email Address"
           />
-          </Row>
-          <Row className="search-fields">
+        </Row>
+        <Row className="search-fields">
           <input
             id="password"
             value={password}
@@ -94,8 +93,7 @@ class Login extends Component {
             type="password"
             placeholder="Password"
           />
-          </Row>
-
+        </Row>
         <Row className="searchButtons search-fields">
             <Mutation
                 mutation={login ? LOGIN_MUTATION : SIGNUP_MUTATION}
@@ -118,7 +116,7 @@ class Login extends Component {
                   : 'Login to existing account'}
             </span>
         </Row>
-        </Container>
+      </Container>
     )
   }
 

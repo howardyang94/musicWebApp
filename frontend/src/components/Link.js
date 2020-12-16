@@ -56,7 +56,8 @@ class Link extends Component {
     state = {
         edit: false,
         showPosted: true,
-        showDeleteModal: false
+        showDeleteModal: false,
+        error:''
     }
     
     deleteModal() {
@@ -91,6 +92,7 @@ class Link extends Component {
                         update={(store, { data: { remove } }) => {
                             this.props.updateCacheAfterRemove(store, remove, id)
                         }}
+                        onError={error => this.handleError(error)}
                     >
                         {deleteMutation => <Button variant="primary" onClick={handleClose, deleteMutation}>Delete</Button>}
                     </Mutation> 
@@ -152,13 +154,22 @@ class Link extends Component {
             </div>
         )
     }
-
+    handleError(error) {
+        // change error message provided to remove unneccessary text?
+        // const errorMessage = error.message.substring(error.message.indexOf(':')+1)
+        this.setState({formErrors: error.message, showDeleteModal: false})
+    }
     render() {
         const { id, title, artist, tags, description, url } = this.props.link
         const postedBy = this.state.showPosted ? this.postedBy() : null
         return (
             <Media className="link">
                     <Container hidden = {this.state.edit} fluid="lg">
+                        <Row>
+                            <div className="error">
+                                {this.state.formErrors}
+                            </div>
+                        </Row>   
                         <Row xs={1} s={1} md={1} lg={2} xl={2}>
                             <Col xs sm = "12" md lg xl="5">
                                 {this.youtubePlayer()}
