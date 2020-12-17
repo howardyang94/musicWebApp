@@ -3,10 +3,11 @@ const jwt = require('jsonwebtoken')
 const { APP_SECRET, getUserId } = require('../utils')
 
 async function signup(parent, args, context, info) {
+    if(await context.prisma.user.findOne({ where: { email: args.email } }) ) {
+        throw new Error('There already exists an account with that username/email')
+    }
     const password = await bcrypt.hash(args.password, 10)
-
     const user = await context.prisma.user.create({ data: { ...args, password } })
-
     const token = jwt.sign({ userId: user.id }, APP_SECRET)
 
     return {
@@ -51,9 +52,17 @@ function post(parent, args, context, info) {
     return newLink
 }
 
-function edit(parent, args, context, info) {
-    
-    const editLink = context.prisma.link.update({ 
+async function edit(parent, args, context, info) {
+    const userId = getUserId(context)
+    let link = await context.prisma.link.findOne({where: {id: Number(args.id)}})
+    if(!link) {
+        console.log(args)
+        throw new Error('Link was not found')
+    }
+    if(link.postedById !== getUserId(context)) {
+        throw new Error('You can only modify links that you created')
+    }
+    link = context.prisma.link.update({ 
         where: {id: Number(args.id)},
         data: {
             title: args.title,
@@ -64,14 +73,21 @@ function edit(parent, args, context, info) {
         }
     })
     // context.pubsub.publish("NEW_LINK", editLink)
-    return editLink
+    return link
 }
 
-function remove (parent, args, context, info) {
+async function remove (parent, args, context, info) {
     const userId = getUserId(context)
-    console.log(userId)
+    let link = await context.prisma.link.findOne({where: {id: Number(args.id)}})
+    if(!link) {
+        console.log(args)
+        throw new Error('Link was not found')
+    }
+    if(link.postedById !== userId) {
+        throw new Error('You can only delete links that you created')
+    }
     // todo: add verification that deleting user is the same as the posting user
-    const link = context.prisma.link.delete({ where: {id: Number(args.id)} })
+    link = await context.prisma.link.delete({ where: {id: Number(args.id)} })
     return link
 }
 
