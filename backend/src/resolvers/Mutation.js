@@ -6,6 +6,7 @@ async function signup(parent, args, context, info) {
     if(await context.prisma.user.findOne({ where: { name: args.name } }) ) {
         throw new Error('That username is already taken, please select a different one')
     }
+    args.email = args.email.toLowerCase()
     if(await context.prisma.user.findOne({ where: { email: args.email } }) ) {
         throw new Error('There already exists an account with that email address')
     }
