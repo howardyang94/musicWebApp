@@ -3,8 +3,11 @@ const jwt = require('jsonwebtoken')
 const { APP_SECRET, getUserId } = require('../utils')
 
 async function signup(parent, args, context, info) {
+    if(await context.prisma.user.findOne({ where: { name: args.name } }) ) {
+        throw new Error('That username is already taken, please select a different one')
+    }
     if(await context.prisma.user.findOne({ where: { email: args.email } }) ) {
-        throw new Error('There already exists an account with that username/email')
+        throw new Error('There already exists an account with that email address')
     }
     const password = await bcrypt.hash(args.password, 10)
     const user = await context.prisma.user.create({ data: { ...args, password } })
