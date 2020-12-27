@@ -11,7 +11,7 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import DropdownToggle from 'react-bootstrap/esm/DropdownToggle'
 import { AUTH_TOKEN } from '../constants'
-// import { timeDifferenceForDate } from '../utils'
+import { timeDifferenceForDate } from '../utils'
 const DELETE_MUTATION = gql`
 mutation DeleteMutation($id: ID!) {
     remove(id: $id){
@@ -43,9 +43,9 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     </button>
   ));
 const timeOptions = {
-    weekday: 'long',
+    // weekday: 'short',
     year:'numeric',
-    month:'long',
+    month:'short',
     day:'numeric',
     hour:'numeric',
     minute:'numeric',
@@ -145,12 +145,26 @@ class Link extends Component {
         }       
     }
     postedBy() {
+        const createdTimeElapsed = timeDifferenceForDate(this.props.link.createdAt)
+        const editedTimeElapsed = timeDifferenceForDate(this.props.link.lastEdited)
+        const createdTimeDate = new Intl.DateTimeFormat('default', timeOptions).format(this.props.link.createdAt)
+        const editedTimeDate = new Intl.DateTimeFormat('default', timeOptions).format(this.props.link.lastEdited)
         return (
             <div className="f6 lh-copy gray mt3">
-                    posted by {this.props.link.postedBy
-                    ? this.props.link.postedBy.name
-                    : 'Unknown'}{' '} 
-                on {new Intl.DateTimeFormat('default', timeOptions).format(this.props.link.createdAt)}
+                <span>
+                    <i>posted by</i> <strong>{this.props.link.postedBy
+                        ? this.props.link.postedBy.name
+                        : 'Unknown'}{' '} </strong>
+                </span>
+                <i>
+                <span title={createdTimeDate}>
+                    {createdTimeElapsed}&nbsp;
+                </span>
+                {/* use formatted date time instead of elapsed time to false positives of ms differences in time */}
+                {createdTimeDate != editedTimeDate && <span title={editedTimeDate}>
+                     last edited {editedTimeElapsed}
+                </span>}
+                </i>
             </div>
         )
     }

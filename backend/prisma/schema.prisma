@@ -10,6 +10,7 @@ generator client {
 model Link {
     id          Int         @id @default(autoincrement())
     createdAt   DateTime    @default(now())
+    lastEdited  DateTime    @default(now())
     title       String
     artist      String  
     tags        String

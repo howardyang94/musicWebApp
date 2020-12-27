@@ -10,6 +10,7 @@ export const FEED_QUERY = gql `
       links {
         id
         createdAt
+        lastEdited
         title
         artist
         tags

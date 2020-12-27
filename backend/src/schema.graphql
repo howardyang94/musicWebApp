@@ -24,6 +24,7 @@ input LinkOrderByInput {
 type Link {
     id: ID!
     createdAt: String!   
+    lastEdited: String
     title: String!
     artist: String!
     tags: String

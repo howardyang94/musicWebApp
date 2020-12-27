@@ -73,7 +73,8 @@ async function edit(parent, args, context, info) {
             artist: args.artist,
             url: args.url,
             description: args.description,
-            tags: args.tags        
+            tags: args.tags,
+            lastEdited: new Date(Date.now())
         }
     })
     // context.pubsub.publish("NEW_LINK", editLink)
