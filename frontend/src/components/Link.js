@@ -106,6 +106,7 @@ class Link extends Component {
     }    
 
     displayTags() {
+        if(!this.props.link.tags) return //<i>no tags</i>
         let arr = []
         const tagPropArr = this.props.link.tags.split(' ');
         for(let i = 0; i < tagPropArr.length; i++ ) {
@@ -114,11 +115,7 @@ class Link extends Component {
             }
             arr.push(<span key={'tag'+i} className="ma1 pa1  ml0 f7 flex-wrap tag"> {tagPropArr[i]}</span>)
         }
-        if(arr.length > 1) {
-            return (
-                <p className="f6 lh-copy mv0 flex-wrap">{arr}</p>
-            )
-        }
+        return <p className="f6 lh-copy mv0 flex-wrap">{arr}</p>
     }
 
     youtubePlayer() {
