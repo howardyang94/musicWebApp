@@ -57,7 +57,8 @@ class Link extends Component {
         edit: false,
         showPosted: true,
         showDeleteModal: false,
-        error:''
+        showErrorModal: false,
+        error:'default error'
     }
     
     deleteModal() {
@@ -100,7 +101,33 @@ class Link extends Component {
             </Modal>
           </>
         );
-      }
+    }
+    errorModal() {
+        const handleClose = () => this.setState({showErrorModal: false});
+        return (
+          <>
+            <Modal
+                show={this.state.showErrorModal}
+                onHide={handleClose}
+                backdrop="static"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>{this.props.link.title}&ensp;<i>{this.props.link.artist}</i></Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {this.state.error}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Ok
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+          </>
+        );
+    }
+
     editCallback = (data) => {
         this.setState({edit: data})
     }    
@@ -121,13 +148,16 @@ class Link extends Component {
     youtubePlayer() {
         let youtubeUrl = ''
         const otherUrls = []
+        // todo: allow only youtube urls in the url field
         for(let url of this.props.link.url.split(' ')) {
             if(url.includes('youtube.com')) {
                 const str = url.slice(url.indexOf('=')+1)
                 youtubeUrl = "https://www.youtube.com/embed/" + str + '?showinfo=0&enablejsapi=1&origin=http://localhost:3000'
             } else {
                 // validate url?
-                otherUrls.push(url)
+                if(url) {
+                    otherUrls.push(url)
+                }
             }
         }
         if(youtubeUrl) {
@@ -168,7 +198,7 @@ class Link extends Component {
     handleError(error) {
         // change error message provided to remove unneccessary text?
         const errorMessage = error.message.substring(error.message.indexOf(':')+1)
-        this.setState({formErrors: errorMessage, showDeleteModal: false})
+        this.setState({error: errorMessage, showDeleteModal: false, showErrorModal: true})
     }
     render() {
         const { id, title, artist, tags, description, url } = this.props.link
@@ -176,11 +206,7 @@ class Link extends Component {
         return (
             <Media className="link">
                     <Container hidden = {this.state.edit} fluid="lg">
-                        <Row>
-                            <div className="error">
-                                {this.state.formErrors}
-                            </div>
-                        </Row>   
+                        {this.errorModal()}
                         <Row xs={1} s={1} md={1} lg={2} xl={2}>
                             <Col xs sm = "12" md lg xl="5">
                                 {this.youtubePlayer()}
