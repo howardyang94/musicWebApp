@@ -71,7 +71,7 @@ class Search extends Component {
             Search By Field
           </Row>
 
-          <Row className="search-fields">
+          <Row className="input-field">
             <Col xs sm = "12" md lg xl ="1">Title</Col>
             <Col>
               <input
@@ -91,7 +91,7 @@ class Search extends Component {
             </Col>
           </Row>
 
-          <Row className="search-fields">
+          <Row className="input-field">
             <Col xs sm = "12" md lg xl ="1">Tags</Col>            
             <Col>
               <input
@@ -114,7 +114,7 @@ class Search extends Component {
             </Col>
           </Row>
           
-          <Row className="search-fields">
+          <Row className="input-field">
             <Col xs sm = "12" md lg xl ="1">Info</Col>
             <Col>
               <input

@@ -35,8 +35,8 @@ input {
 .error {
   color: red
 }
-.ml12{
-  margin-left: 12px;
+.ml14{
+  margin-left: 14px;
 }
 .mt10{
   margin-top: 10px;
@@ -187,7 +187,11 @@ textarea {
   padding: 15px 0px 12px;
   margin: 0px 5px 0px 5px;
 }
-
+/********/
+/* Input */
+.input-field {
+  margin-top: 10px;
+}
 /********/
 /* Search */
 .search-title {
@@ -196,9 +200,6 @@ textarea {
   padding: 0px 0px 6px;
   font-weight: bold;
   font-size: large;
-}
-.search-fields {
-  margin-top: 10px;
 }
 .search-buttons {
   margin-top:12px

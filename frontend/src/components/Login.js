@@ -42,14 +42,14 @@ class Login extends Component {
   }
   validateSignup() {
     this.setState({ signUpValid: this.state.loginValid && this.state.email.length > 0 })
-    console.log(this.state)
   }
   handleError(error) {
-    // change error message provided to remove unneccessary text?
+  // change error message provided to remove unneccessary text?
     const errorMessage = error.message.substring(error.message.indexOf(':')+1)
     this.setState({formErrors: errorMessage})
-    document.getElementById('name').value = ''
-    document.getElementById('password').value = ''
+  // clear input fields upon error?
+    // document.getElementById('name').value = ''
+    // document.getElementById('password').value = ''
   }
   render() {
     // if user is already logged in redirect to home page
@@ -60,14 +60,22 @@ class Login extends Component {
       <Container>       
         <Row>
           <h3 className="mv3">{login ? 'Login' : 'Sign Up'}</h3>
-        </Row>
-        <Row>
-          <div className="error">
-            {this.state.formErrors}
+          <div
+            className="no-underline blue pointer ml14 mt10"
+            onClick={() => this.setState({ login: !login })}
+          >
+            {login ? 'create new account' : 'login to existing account'}
           </div>
-        </Row>   
-        {!login && (
+        </Row>
+        {this.state.formErrors.split(';').map(error => (
           <Row>
+            <div className="error">
+              {error}
+            </div>
+          </Row>   
+         ))}
+        {!login && (
+          <Row className="input-field">
             <input
               id="email"
               value={email}
@@ -77,7 +85,7 @@ class Login extends Component {
             />
           </Row>
         )}
-        <Row className="search-fields">
+        <Row className="input-field">
           <input
             id="name"
             value={name}
@@ -86,7 +94,7 @@ class Login extends Component {
             placeholder="Username"
           />
         </Row>
-        <Row className="search-fields">
+        <Row className="input-field">
           <input
             id="password"
             value={password}
@@ -95,7 +103,7 @@ class Login extends Component {
             placeholder="Password"
           />
         </Row>
-        <Row className="searchButtons search-fields">
+        <Row className="searchButtons input-field">
             <Mutation
                 mutation={login ? LOGIN_MUTATION : SIGNUP_MUTATION}
                 variables={{ email, password, name }}
@@ -108,14 +116,7 @@ class Login extends Component {
                 </Button>
                 )}
             </Mutation>
-            <span
-            className="no-underline blue pointer ml12 mt10"
-            onClick={() => this.setState({ login: !login })}
-            >
-                {login
-                  ? 'Create account'
-                  : 'Login to existing account'}
-            </span>
+            
         </Row>
       </Container>
     )
