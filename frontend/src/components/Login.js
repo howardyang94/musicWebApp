@@ -15,8 +15,8 @@ const SIGNUP_MUTATION = gql`
 `
 
 const LOGIN_MUTATION = gql`
-  mutation LoginMutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+  mutation LoginMutation($name: String!, $password: String!) {
+    login(name: $name, password: $password) {
       token
     }
   }
@@ -38,16 +38,17 @@ class Login extends Component {
     this.setState({[name]: value}, this.validateLogin)
   }
   validateLogin() {
-    this.setState({ loginValid: this.state.password.length > 0 && this.state.email.length > 0 }, this.validateSignup)    
+    this.setState({ loginValid: this.state.password.length > 0 && this.state.name.length > 0 }, this.validateSignup)    
   }
   validateSignup() {
-    this.setState({ signUpValid: this.state.loginValid && this.state.name.length > 0 })
+    this.setState({ signUpValid: this.state.loginValid && this.state.email.length > 0 })
+    console.log(this.state)
   }
   handleError(error) {
     // change error message provided to remove unneccessary text?
     const errorMessage = error.message.substring(error.message.indexOf(':')+1)
     this.setState({formErrors: errorMessage})
-    document.getElementById('email').value = ''
+    document.getElementById('name').value = ''
     document.getElementById('password').value = ''
   }
   render() {
@@ -65,24 +66,24 @@ class Login extends Component {
             {this.state.formErrors}
           </div>
         </Row>   
-          {!login && (
-            <Row>
-              <input
-                id="name"
-                value={name}
-                onChange={e => this.handleInput(e)}
-                type="text"
-                placeholder="Username"
-              />
+        {!login && (
+          <Row>
+            <input
+              id="email"
+              value={email}
+              onChange={e => this.handleInput(e)}
+              type="text"
+              placeholder="Email Address"
+            />
           </Row>
         )}
         <Row className="search-fields">
           <input
-            id="email"
-            value={email}
+            id="name"
+            value={name}
             onChange={e => this.handleInput(e)}
             type="text"
-            placeholder="Email Address"
+            placeholder="Username"
           />
         </Row>
         <Row className="search-fields">

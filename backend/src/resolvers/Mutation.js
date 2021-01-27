@@ -21,7 +21,8 @@ async function signup(parent, args, context, info) {
 }
 
 async function login(parent, args, context, info) {
-    const user = await context.prisma.user.findOne({ where: { email: args.email } })
+    console.log('args', args)
+    const user = await context.prisma.user.findOne({ where: { name: args.name } })
     if (!user) {
         throw new Error('User not found')
     }
