@@ -41,7 +41,8 @@ class Login extends Component {
     this.setState({ loginValid: this.state.password.length > 0 && this.state.name.length > 0 }, this.validateSignup)    
   }
   validateSignup() {
-    this.setState({ signUpValid: this.state.loginValid && this.state.email.length > 0 })
+    let validEmail = /^\w+[\+\.\w-]*@([\w-]+\.)*\w+[\w-]*\.[a-z]{2,4}$/i
+    this.setState({ signUpValid: this.state.loginValid && validEmail.exec(this.state.email) })
   }
   handleError(error) {
   // change error message provided to remove unneccessary text?

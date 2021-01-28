@@ -8,7 +8,10 @@ async function signup(parent, args, context, info) {
         error += 'That username is already taken, please select a different one;'
     }
     args.email = args.email.toLowerCase()
-    if(await context.prisma.user.findOne({ where: { email: args.email } }) ) {
+    let validEmail = /^\w+[\+\.\w-]*@([\w-]+\.)*\w+[\w-]*\.[a-z]{2,4}$/i
+    if(!validEmail.exec(args.email)) {
+        error += 'Please enter a valid email address;'
+    } else if(await context.prisma.user.findOne({ where: { email: args.email } }) ) {
         error += 'There already exists an account with that email address;'
     }
     if(error.length > 0) throw new Error(error)
