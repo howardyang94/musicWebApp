@@ -142,9 +142,34 @@ class Link extends Component {
             }
             arr.push(<span key={'tag'+i} className="ma1 pa1  ml0 f7 flex-wrap tag"> {tagPropArr[i]}</span>)
         }
-        return <p className="f6 lh-copy mv0 flex-wrap">{arr}</p>
+        return arr
     }
-
+    formatDescription() {
+        let desc = this.props.link.description
+        if(!desc) return
+        if(!desc.includes('http')) {
+            return this.props.link.description
+        }
+        let arr = [], i = -1, prev = -1
+        while ((i = desc.indexOf('http', i+1)) !== -1){
+            console.log(prev, i)
+            if(prev + 1 < i) {
+                arr.push(desc.slice(prev+1, i))
+                arr.push(<br></br>)
+            }
+            prev = i
+            while(++i < desc.length) {
+                if(desc[i] === ' ' || desc[i] === '\n') {
+                break
+                }
+            }
+            arr.push(desc.slice(prev, i))
+            arr[arr.length-1] = <a href={arr[arr.length-1]} target="_blank">{arr[arr.length-1]}</a>
+            arr.push(<br></br>)
+            prev = i
+        }
+        return arr
+    }
     youtubePlayer() {
         let youtubeUrl = ''
         const otherUrls = []
@@ -188,7 +213,7 @@ class Link extends Component {
                     {createdTimeElapsed}&nbsp;
                 </span>
                 {/* use formatted date time instead of elapsed time to false positives of ms differences in time */}
-                {createdTimeDate != editedTimeDate && <span title={editedTimeDate}>
+                {createdTimeDate !== editedTimeDate && <span title={editedTimeDate}>
                      last edited {editedTimeElapsed}
                 </span>}
                 </i>
@@ -215,9 +240,11 @@ class Link extends Component {
                                 <h1 className="title">{this.props.link.title}</h1>
                                 <h2 className="artist">{this.props.link.artist} </h2>
                                 <p className="description">
-                                    {this.props.link.description}
+                                    {this.formatDescription()}
                                 </p>
-                                {this.displayTags()}
+                                <p className="f6 lh-copy mv0 flex-wrap tagRow">
+                                    {this.displayTags()}
+                                </p>
                                 {postedBy}
                             </Col>
                             <Col xs sm ={{span: 'auto', order:'first'}} md lg xl={{span: 'auto', order:'last'}}>
